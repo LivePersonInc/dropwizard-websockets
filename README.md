@@ -25,7 +25,7 @@ Add the maven dependency:
 
 Usage
 ---
-In your code you should add the ``WebsocketBundle`` in the initialization stage of the Application. Give the bundle your enpoints classes (or ``ServerEndpoindConfig`` in case of programmatic endpoint) as parameteres:
+In your code you should add the ``WebsocketBundle`` in the initialization stage of the Application. Give the bundle your enpoints classes (or ``ServerEndpoindConfig`` in case of programmatic endpoints) as parameteres:
 
 ```java
 public void initialize(Bootstrap<Configuration> bootstrap) {
