@@ -13,7 +13,8 @@
     </properties>
     <artifactId>dropwizard-websockets</artifactId>
     <packaging>jar</packaging>
-    <name>Dropwizard Websocket Stoppurt</name>
+    <inceptionYear>2015</inceptionYear>
+    <name>Dropwizard Websocket Support</name>
     <description>3rd party bundle for dropwizard to enable websocket services.</description>
     <url>https://github.com/LivePersonInc/dropwizard-websockets</url>
     <licenses>
@@ -172,6 +173,30 @@
                     <releaseProfiles>release</releaseProfiles>
                     <goals>deploy</goals>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>2.11</version>
+                <configuration>
+                    <header>com/mycila/maven/plugin/license/templates/MIT.txt</header>
+                    <properties>
+                        <owner>LivePerson, Inc.</owner>
+                    </properties>
+                    <excludes>
+                        <exclude>**/README</exclude>
+                        <exclude>**/pom.xml</exclude>
+                        <exclude>src/test/resources/**</exclude>
+                        <exclude>src/main/resources/**</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
