@@ -22,6 +22,7 @@
  */
 package io.dropwizard.websockets;
 
+import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 import com.codahale.metrics.health.HealthCheck;
@@ -73,6 +74,7 @@ public class MyApp extends Application<Configuration> {
 
     @Metered
     @Timed
+    @ExceptionMetered
     @ServerEndpoint("/annotated-ws")
     public static class AnnotatedEchoServer {
         @OnOpen
