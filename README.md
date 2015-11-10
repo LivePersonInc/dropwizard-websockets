@@ -33,7 +33,8 @@ public void initialize(Bootstrap<Configuration> bootstrap) {
 }
 ```
 
-That's all. 
+That's all.
+A full example can be found in the [tests classes](https://github.com/LivePersonInc/dropwizard-websockets/blob/master/src/test/java/io/dropwizard/websockets/MyApp.java).
 
 Metrics
 ---
