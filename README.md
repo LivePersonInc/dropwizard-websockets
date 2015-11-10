@@ -105,3 +105,6 @@ Then you'll be able to see your metrics as follows:
   }
 }
 ```
+Alternatives
+---
+See also [dropwizard-websocket-jee7-bundle](https://github.com/TomCools/dropwizard-websocket-jee7-bundle).
