@@ -33,7 +33,11 @@ public void initialize(Bootstrap<Configuration> bootstrap) {
 }
 ```
 
-That's all. In order to collect metrics on your endpoints, you should annotate them with metrics annotations:
+That's all. 
+
+Metrics
+---
+In order to collect metrics on your endpoints, you should annotate them with metrics annotations:
 
 ```java
 @Metered
