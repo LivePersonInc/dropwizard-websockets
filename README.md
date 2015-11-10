@@ -15,44 +15,46 @@ Maven Dependency
 ---
 Add the maven dependency: 
 
-    <dependency>
-      <groupId>com.liveperson</groupId>
-      <artifactId>dropwizard-websocket</artifactId>
-      <version>1.2</version>
-    </dependency>
+```xml
+<dependency>
+  <groupId>com.liveperson</groupId>
+  <artifactId>dropwizard-websocket</artifactId>
+  <version>1.2</version>
+</dependency>
+```
 
 Usage
 ---
 In your code you should add the ``WebsocketBundle`` in the initialization stage of the Application. Give the bundle your enpoints classes (or ``ServerEndpoindConfig`` in case of programmatic endpoint) as parameteres:
 
 ```java
-    public void initialize(Bootstrap<Configuration> bootstrap) {
-        bootstrap.addBundle(new WebsocketBundle(MyWebSocket1.class, MyWebSocket2.class));
-    }
+public void initialize(Bootstrap<Configuration> bootstrap) {
+    bootstrap.addBundle(new WebsocketBundle(MyWebSocket1.class, MyWebSocket2.class));
+}
 ```
 
 That's all. In order to collect metrics on your endpoints, you should annotate them with metrics annotations:
 
 ```java
-    @Metered
-    @Timed
-    @ExceptionMetered
-    @ServerEndpoint("/annotated-ws")
-    public static class AnnotatedEchoServer {
-        @OnOpen
-        public void myOnOpen(final Session session) throws IOException {
-            session.getAsyncRemote().sendText("welcome");
-        }
-
-        @OnMessage
-        public void myOnMsg(final Session session, String message) {
-            session.getAsyncRemote().sendText(message.toUpperCase());
-        }
-
-        @OnClose
-        public void myOnClose(final Session session, CloseReason cr) {
-        }
+@Metered
+@Timed
+@ExceptionMetered
+@ServerEndpoint("/annotated-ws")
+public static class AnnotatedEchoServer {
+    @OnOpen
+    public void myOnOpen(final Session session) throws IOException {
+        session.getAsyncRemote().sendText("welcome");
     }
+
+    @OnMessage
+    public void myOnMsg(final Session session, String message) {
+        session.getAsyncRemote().sendText(message.toUpperCase());
+    }
+
+    @OnClose
+    public void myOnClose(final Session session, CloseReason cr) {
+    }
+}
 ```
 
 Then you'll be able to see your metrics as follows:
