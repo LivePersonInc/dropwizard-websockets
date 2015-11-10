@@ -2,7 +2,7 @@ Dropwizard Websocket Support
 ==========
 [![Build Status](https://api.travis-ci.org/LivePersonInc/dropwizard-websockets.svg?branch=master)](https://api.travis-ci.org/LivePersonInc/dropwizard-websockets.svg?branch=master)
 
-Enhance the [dropwizard](http://www.dropwizard.io) capablities to support not only JAX-RS resources but also websockets endpoints using the JSR-356 API.
+Enhance [Dropwizard](http://www.dropwizard.io) capablities to support not only JAX-RS resources but also websockets endpoints using the JSR-356 API.
 
 The websockets endpoints will be instrumented the same way Dropwizards does with JAX-RS resources, and their metrics will be exposed in the same way. This includes:
 
