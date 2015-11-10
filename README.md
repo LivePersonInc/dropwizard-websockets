@@ -28,6 +28,7 @@ In your code you should add the ``WebsocketBundle`` in the initialization stage 
 ```java
     public void initialize(Bootstrap<Configuration> bootstrap) {
         bootstrap.addBundle(new WebsocketBundle(MyWebSocket1.class, MyWebSocket2.class));
+    }
 ```
 
 That's all. In order to collect metrics on your endpoints, you should annotate them with metrics annotations:
