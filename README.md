@@ -1,8 +1,9 @@
 Dropwizard Websocket Support
 ==========
 [![Build Status](https://api.travis-ci.org/LivePersonInc/dropwizard-websockets.svg?branch=master)](https://travis-ci.org/LivePersonInc/dropwizard-websockets)
+[![Maven Central](https://img.shields.io/maven-central/v/com.liveperson/dropwizard-websockets.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22dropwizard-websockets%22)
 
-Enhance [Dropwizard](http://www.dropwizard.io) capablities to support not only JAX-RS resources but also websockets endpoints using the JSR-356 API.
+A [3rd party Dropwizard bundle](http://modules.dropwizard.io/thirdparty/), that enhances [Dropwizard](http://www.dropwizard.io) capablities to support not only JAX-RS resources but also websockets endpoints using the JSR-356 API.
 
 The websockets endpoints will be instrumented the same way Dropwizards does with JAX-RS resources, and their metrics will be exposed in the same way. This includes:
 
@@ -19,7 +20,7 @@ Add the maven dependency:
 <dependency>
   <groupId>com.liveperson</groupId>
   <artifactId>dropwizard-websocket</artifactId>
-  <version>0.9.1-1</version>
+  <version></version>
 </dependency>
 ```
 
