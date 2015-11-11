@@ -1,9 +1,10 @@
 Dropwizard Websocket Support
 ==========
 [![Build Status](https://api.travis-ci.org/LivePersonInc/dropwizard-websockets.svg?branch=master)](https://travis-ci.org/LivePersonInc/dropwizard-websockets)
-[![Maven Central](https://img.shields.io/maven-central/v/com.liveperson/dropwizard-websockets.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22dropwizard-websockets%22)
+[![Manual maven central](https://img.shields.io/badge/maven--central-v0.9.1--1-blue.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22dropwizard-websockets%22)
 [![Dependency Status](https://www.versioneye.com/user/projects/5642ede8c5999a0009027e23/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5642ede8c5999a0009027e23)
 [![Coverage Status](https://coveralls.io/repos/LivePersonInc/dropwizard-websockets/badge.svg?branch=master&service=github)](https://coveralls.io/github/LivePersonInc/dropwizard-websockets?branch=master)
+[//]: # ([![Maven Central](https://img.shields.io/maven-central/v/com.liveperson/dropwizard-websockets.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22dropwizard-websockets%22))
 
 A [3rd party Dropwizard bundle](http://modules.dropwizard.io/thirdparty/), that enhances [Dropwizard](http://www.dropwizard.io) capablities to support not only JAX-RS resources but also websockets endpoints using the JSR-356 API.
 
