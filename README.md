@@ -19,7 +19,7 @@ Add the maven dependency:
 <dependency>
   <groupId>com.liveperson</groupId>
   <artifactId>dropwizard-websocket</artifactId>
-  <version>1.2</version>
+  <version>0.9.1-1</version>
 </dependency>
 ```
 
