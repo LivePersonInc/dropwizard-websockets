@@ -35,6 +35,8 @@ import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.glassfish.tyrus.client.ClientManager;
+import org.glassfish.tyrus.client.ClientProperties;
 import org.glassfish.tyrus.ext.client.java8.SessionBuilder;
 import org.junit.After;
 import static org.junit.Assert.*;
@@ -52,13 +54,16 @@ public class DropWizardWebsocketsTest {
     }
     private CloseableHttpClient client;
     private ObjectMapper om;
+    private ClientManager wsClient;
 
     @Before
     public void setUp() throws Exception {
         this.client = HttpClients.custom().setDefaultRequestConfig(RequestConfig.custom()
-                .setSocketTimeout(5000).setConnectTimeout(5000).setConnectionRequestTimeout(5000)
+                .setSocketTimeout(10000).setConnectTimeout(10000).setConnectionRequestTimeout(10000)
                 .build()).build();
         this.om = new ObjectMapper();
+        this.wsClient = ClientManager.createClient();
+        wsClient.getProperties().put(ClientProperties.HANDSHAKE_TIMEOUT, 10000);
     }
 
     @After
@@ -88,7 +93,7 @@ public class DropWizardWebsocketsTest {
     }
 
     private void testWsMetrics(final Class<?> klass, final String path) throws Exception {
-        try (Session ws = new SessionBuilder()
+        try (Session ws = new SessionBuilder(wsClient)
                 .uri(new URI(String.format("ws://%s:%d/%s", LOCALHOST, PORT, path)))
                 .connect()) {
             for (int i = 0; i < 3; i++) {
