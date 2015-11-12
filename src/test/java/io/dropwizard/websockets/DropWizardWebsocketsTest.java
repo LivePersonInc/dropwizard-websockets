@@ -68,7 +68,7 @@ public class DropWizardWebsocketsTest {
 
     @Test
     public void testGet() throws IOException, InterruptedException, Exception {
-        final int NUM = 10;
+        final int NUM = 2;
         for (int i = 0; i < NUM; i++)
             assertTrue(client.execute(new HttpGet(String.format("http://%s:%d/api?name=foo", LOCALHOST, PORT)), BASIC_RESPONSE_HANDLER).contains("foo"));
         ObjectNode json = om.readValue(client.execute(new HttpGet(METRICS_URL), BASIC_RESPONSE_HANDLER), ObjectNode.class);
@@ -118,14 +118,15 @@ public class DropWizardWebsocketsTest {
     }
 
     public static void waitUrlAvailable(final String url) throws InterruptedException, IOException {
-        for (int i = 0; i < 50; i++) {
-            Thread.sleep(100);
+        for (int i = 0; i < 5; i++) {
+            Thread.sleep(1000);
             try {
                 if (HttpClients.createDefault().execute(new HttpGet(url)).getStatusLine().getStatusCode() > -100)
                     break;
             } catch (HttpHostConnectException ex) {
             }
         }
+        Thread.sleep(1000);
     }
 
     private static final int ADMIN_PORT = 48081;
