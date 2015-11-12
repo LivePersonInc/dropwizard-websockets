@@ -27,6 +27,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.io.Resources;
 import java.io.IOException;
 import java.net.URI;
+import java.util.concurrent.CountDownLatch;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import javax.websocket.Session;
 import junit.framework.Assert;
 import org.apache.http.client.config.RequestConfig;
@@ -47,10 +49,11 @@ import org.junit.Test;
 public class DropWizardWebsocketsTest {
     @BeforeClass
     public static void setUpClass() throws InterruptedException, IOException {
-        Thread t = new Thread(GeneralUtils.rethrow(() -> new MyApp().run(new String[]{"server", Resources.getResource("server.yml").getPath()})));
+        CountDownLatch cdl = new CountDownLatch(1);
+        Thread t = new Thread(GeneralUtils.rethrow(() -> new MyApp(cdl).run(new String[]{"server", Resources.getResource("server.yml").getPath()})));
         t.setDaemon(true);
         t.start();
-        waitUrlAvailable(HEALTHCHECK);
+        cdl.await(10, SECONDS);
     }
     private CloseableHttpClient client;
     private ObjectMapper om;

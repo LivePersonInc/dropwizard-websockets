@@ -1,6 +1,5 @@
 /**
- * The MIT License
- * Copyright (c) 2015 LivePerson, Inc.
+ * The MIT License Copyright (c) 2015 LivePerson, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -17,8 +16,8 @@
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package io.dropwizard.websockets;
 
@@ -34,6 +33,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
+import java.util.concurrent.CountDownLatch;
 import javax.servlet.ServletException;
 import javax.websocket.CloseReason;
 import javax.websocket.DeploymentException;
@@ -50,9 +50,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import org.eclipse.jetty.util.component.AbstractLifeCycle;
+import org.eclipse.jetty.util.component.LifeCycle;
 import org.eclipse.jetty.websocket.jsr356.server.BasicServerEndpointConfig;
 
 public class MyApp extends Application<Configuration> {
+    private final CountDownLatch cdl;
+
+    MyApp(CountDownLatch cdl) {
+        this.cdl = cdl;
+    }
 
     @Override
     public void initialize(Bootstrap<Configuration> bootstrap) {
@@ -63,6 +70,13 @@ public class MyApp extends Application<Configuration> {
 
     @Override
     public void run(Configuration configuration, Environment environment) throws InvalidKeySpecException, NoSuchAlgorithmException, ServletException, DeploymentException {
+        environment.lifecycle().addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
+
+            @Override
+            public void lifeCycleStarted(LifeCycle event) {
+                cdl.countDown();
+            }
+        });
         environment.jersey().register(new MyResource());
         environment.healthChecks().register("alive", new HealthCheck() {
             @Override
