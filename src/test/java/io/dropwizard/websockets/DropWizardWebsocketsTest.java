@@ -49,11 +49,11 @@ import org.junit.Test;
 public class DropWizardWebsocketsTest {
     @BeforeClass
     public static void setUpClass() throws InterruptedException, IOException {
-        CountDownLatch cdl = new CountDownLatch(1);
-        Thread t = new Thread(GeneralUtils.rethrow(() -> new MyApp(cdl).run(new String[]{"server", Resources.getResource("server.yml").getPath()})));
-        t.setDaemon(true);
-        t.start();
-        cdl.await(10, SECONDS);
+        CountDownLatch serverStarted = new CountDownLatch(1);
+        Thread serverThread = new Thread(GeneralUtils.rethrow(() -> new MyApp(serverStarted).run(new String[]{"server", Resources.getResource("server.yml").getPath()})));
+        serverThread.setDaemon(true);
+        serverThread.start();
+        serverStarted.await(10, SECONDS);
     }
     private CloseableHttpClient client;
     private ObjectMapper om;
@@ -74,7 +74,7 @@ public class DropWizardWebsocketsTest {
         client.close();
     }
 
-//    @Test
+    @Test
     public void testGet() throws IOException, InterruptedException, Exception {
         final int NUM = 2;
         for (int i = 0; i < NUM; i++)
