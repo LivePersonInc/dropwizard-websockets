@@ -6,30 +6,30 @@ Dropwizard Websocket Support
 [![Coverage Status](https://coveralls.io/repos/LivePersonInc/dropwizard-websockets/badge.svg?branch=master&service=github)](https://coveralls.io/github/LivePersonInc/dropwizard-websockets?branch=master)
 [//]: # ([![Maven Central](https://img.shields.io/maven-central/v/com.liveperson/dropwizard-websockets.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22dropwizard-websockets%22))
 
-A [3rd party Dropwizard bundle](http://modules.dropwizard.io/thirdparty/), that enhances [Dropwizard](http://www.dropwizard.io) capablities to support not only JAX-RS resources but also websockets endpoints using the JSR-356 API.
+A [3rd party Dropwizard bundle](http://modules.dropwizard.io/thirdparty/), that enhances [Dropwizard](http://www.dropwizard.io) capabilities to support not only JAX-RS resources but also websockets endpoints using the JSR-356 API.
 
 The websockets endpoints will be instrumented the same way Dropwizards does with JAX-RS resources, and their metrics will be exposed in the same way. This includes:
 
 * Counters of current open sessions.
 * Counters and rate meters for new connections.
-* Counters and rate meters for messeages revieved by the endpoint.
-* Timers and statstics for session duration.
+* Counters and rate meters for messages reviewed by the endpoint.
+* Timers and statistics for session duration.
 
 Maven Dependency
 ---
-Add the maven dependency: 
+Add the Maven dependency: 
 
 ```xml
 <dependency>
   <groupId>com.liveperson</groupId>
-  <artifactId>dropwizard-websocket</artifactId>
-  <version></version>
+  <artifactId>dropwizard-websockets</artifactId>
+  <version>0.9.1-1</version>
 </dependency>
 ```
 
 Usage
 ---
-In your code you should add the ``WebsocketBundle`` in the initialization stage of the Application. Give the bundle your enpoints classes (or ``ServerEndpoindConfig`` in case of programmatic endpoints) as parameteres:
+In your code you should add the ``WebsocketBundle`` in the initialization stage of the Application. Give the bundle your endpoints classes (or ``ServerEndpoindConfig`` in case of programmatic endpoints) as parameters:
 
 ```java
 public void initialize(Bootstrap<Configuration> bootstrap) {
