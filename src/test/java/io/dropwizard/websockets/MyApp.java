@@ -64,10 +64,11 @@ public class MyApp extends Application<Configuration> {
 
     @Override
     public void initialize(Bootstrap<Configuration> bootstrap) {
-        bootstrap.addBundle(new WebsocketBundle(
-                Arrays.asList(AnnotatedEchoServer.class),
-                Arrays.asList(new BasicServerEndpointConfig(EchoServer.class, "/extends-ws"))));
+        websocketBundle = new WebsocketBundle(AnnotatedEchoServer.class);
+        bootstrap.addBundle(websocketBundle);
     }
+
+    private WebsocketBundle websocketBundle;
 
     @Override
     public void run(Configuration configuration, Environment environment) throws InvalidKeySpecException, NoSuchAlgorithmException, ServletException, DeploymentException {
@@ -85,6 +86,13 @@ public class MyApp extends Application<Configuration> {
                 return HealthCheck.Result.healthy();
             }
         });
+
+        // Using BasicServerEndpointConfig lets you inject objects to the websocket endpoint:
+        final BasicServerEndpointConfig bsec = new BasicServerEndpointConfig(EchoServer.class, "/extends-ws");
+        // bsec.getUserProperties().put(Environment.class.getName(), environment);
+        // Then you can get it from the Session object
+        // - obj = session.getUserProperties().get("objectName");            
+        websocketBundle.addEndpoint(bsec);
     }
 
     @Metered

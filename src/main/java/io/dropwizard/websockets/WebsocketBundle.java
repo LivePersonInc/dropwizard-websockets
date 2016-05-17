@@ -39,12 +39,14 @@ import org.eclipse.jetty.websocket.jsr356.server.ServerContainer;
 import org.eclipse.jetty.websocket.jsr356.server.ServerEndpointMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static io.dropwizard.websockets.GeneralUtils.rethrow;
 
 public class WebsocketBundle implements Bundle {
 
-    private final Collection<Class<?>> annotatedEndpoints;
-    private final Collection<ServerEndpointConfig> extendsEndpoints;
-    private static final Logger log = LoggerFactory.getLogger(WebsocketBundle.class);
+    private final Collection<Class<?>> annotatedEndpoints = new ArrayList<>();
+    private final Collection<ServerEndpointConfig> extendsEndpoints = new ArrayList<>();
+    private static final Logger LOG = LoggerFactory.getLogger(WebsocketBundle.class);
+    volatile boolean starting = false;
 
     public WebsocketBundle(Class<?>... endpoints) {
         this(Arrays.asList(endpoints), new ArrayList<>());
@@ -55,8 +57,20 @@ public class WebsocketBundle implements Bundle {
     }
 
     public WebsocketBundle(Collection<Class<?>> endClassCls, Collection<ServerEndpointConfig> epC) {
-        this.annotatedEndpoints = endClassCls;
-        this.extendsEndpoints = epC;
+        this.annotatedEndpoints.addAll(endClassCls);
+        this.extendsEndpoints.addAll(epC);
+    }
+
+    public void addEndpoint(ServerEndpointConfig epC) {
+        extendsEndpoints.add(epC);
+        if (starting)
+            throw new RuntimeException("can't add endpoint after starting lifecycle");
+    }
+
+    public void addEndpoint(Class<?> endClassCls) {
+        annotatedEndpoints.add(endClassCls);
+        if (starting)
+            throw new RuntimeException("can't add endpoint after starting lifecycle");
     }
 
     @Override
@@ -69,6 +83,7 @@ public class WebsocketBundle implements Bundle {
 
             @Override
             public void lifeCycleStarting(LifeCycle event) {
+                starting = true;
                 try {
                     ServerContainer wsContainer = InstWebSocketServerContainerInitializer.
                             configureContext(environment.getApplicationContext(), environment.metrics());
@@ -79,7 +94,7 @@ public class WebsocketBundle implements Bundle {
 
                     annotatedEndpoints.forEach(rethrow(ep -> addEndpoint(wsContainer, ep, null, sb)));
                     extendsEndpoints.forEach(rethrow(conf -> addEndpoint(wsContainer, conf.getEndpointClass(), conf, sb)));
-                    log.info(sb.toString());
+                    LOG.info(sb.toString());
                 } catch (ServletException ex) {
                     throw new RuntimeException(ex);
                 }
