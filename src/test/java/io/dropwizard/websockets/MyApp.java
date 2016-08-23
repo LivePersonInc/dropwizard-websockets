@@ -30,30 +30,22 @@ import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.util.Arrays;
-import java.util.concurrent.CountDownLatch;
+import org.eclipse.jetty.util.component.AbstractLifeCycle;
+import org.eclipse.jetty.util.component.LifeCycle;
+
 import javax.servlet.ServletException;
-import javax.websocket.CloseReason;
-import javax.websocket.DeploymentException;
-import javax.websocket.Endpoint;
-import javax.websocket.EndpointConfig;
-import javax.websocket.MessageHandler;
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
+import javax.websocket.server.ServerEndpointConfig;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import org.eclipse.jetty.util.component.AbstractLifeCycle;
-import org.eclipse.jetty.util.component.LifeCycle;
-import org.eclipse.jetty.websocket.jsr356.server.BasicServerEndpointConfig;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.concurrent.CountDownLatch;
 
 public class MyApp extends Application<Configuration> {
     private final CountDownLatch cdl;
@@ -87,12 +79,12 @@ public class MyApp extends Application<Configuration> {
             }
         });
 
-        // Using BasicServerEndpointConfig lets you inject objects to the websocket endpoint:
-        final BasicServerEndpointConfig bsec = new BasicServerEndpointConfig(EchoServer.class, "/extends-ws");
-        // bsec.getUserProperties().put(Environment.class.getName(), environment);
+        // Using ServerEndpointConfig lets you inject objects to the websocket endpoint:
+        final ServerEndpointConfig config = ServerEndpointConfig.Builder.create(EchoServer.class, "/extends-ws").build();
+        // config.getUserProperties().put(Environment.class.getName(), environment);
         // Then you can get it from the Session object
         // - obj = session.getUserProperties().get("objectName");            
-        websocketBundle.addEndpoint(bsec);
+        websocketBundle.addEndpoint(config);
     }
 
     @Metered

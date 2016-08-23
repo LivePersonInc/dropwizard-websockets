@@ -26,49 +26,64 @@ import io.dropwizard.Bundle;
 import io.dropwizard.metrics.jetty9.websockets.InstWebSocketServerContainerInitializer;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import static io.dropwizard.websockets.GeneralUtils.rethrow;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import javax.servlet.ServletException;
-import javax.websocket.DeploymentException;
-import javax.websocket.server.ServerEndpointConfig;
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.eclipse.jetty.websocket.jsr356.server.ServerContainer;
-import org.eclipse.jetty.websocket.jsr356.server.ServerEndpointMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletException;
+import javax.websocket.DeploymentException;
+import javax.websocket.server.ServerEndpoint;
+import javax.websocket.server.ServerEndpointConfig;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+
 import static io.dropwizard.websockets.GeneralUtils.rethrow;
 
 public class WebsocketBundle implements Bundle {
 
-    private final Collection<Class<?>> annotatedEndpoints = new ArrayList<>();
-    private final Collection<ServerEndpointConfig> extendsEndpoints = new ArrayList<>();
+    private final Collection<ServerEndpointConfig> endpointConfigs = new ArrayList<>();
     private static final Logger LOG = LoggerFactory.getLogger(WebsocketBundle.class);
     volatile boolean starting = false;
+    private ServerEndpointConfig.Configurator defaultConfigurator;
+
+
+    public WebsocketBundle(ServerEndpointConfig.Configurator defaultConfigurator, Class<?>... endpoints) {
+        this(defaultConfigurator, Arrays.asList(endpoints), new ArrayList<>());
+    }
 
     public WebsocketBundle(Class<?>... endpoints) {
-        this(Arrays.asList(endpoints), new ArrayList<>());
+        this(null, Arrays.asList(endpoints), new ArrayList<>());
     }
 
     public WebsocketBundle(ServerEndpointConfig... configs) {
-        this(new ArrayList<>(), Arrays.asList(configs));
+        this(null, new ArrayList<>(), Arrays.asList(configs));
     }
 
-    public WebsocketBundle(Collection<Class<?>> endClassCls, Collection<ServerEndpointConfig> epC) {
-        this.annotatedEndpoints.addAll(endClassCls);
-        this.extendsEndpoints.addAll(epC);
+    public WebsocketBundle(ServerEndpointConfig.Configurator defaultConfigurator, Collection<Class<?>> endpointClasses, Collection<ServerEndpointConfig> serverEndpointConfigs) {
+        this.defaultConfigurator = defaultConfigurator;
+        endpointClasses.forEach((clazz)-> addEndpoint(clazz));
+        this.endpointConfigs.addAll(serverEndpointConfigs);
     }
 
     public void addEndpoint(ServerEndpointConfig epC) {
-        extendsEndpoints.add(epC);
+        endpointConfigs.add(epC);
         if (starting)
             throw new RuntimeException("can't add endpoint after starting lifecycle");
     }
 
-    public void addEndpoint(Class<?> endClassCls) {
-        annotatedEndpoints.add(endClassCls);
+    public void addEndpoint(Class<?> clazz) {
+        ServerEndpoint anno = clazz.getAnnotation(ServerEndpoint.class);
+        if(anno == null){
+            throw new RuntimeException(clazz.getCanonicalName()+" does not have a "+ServerEndpoint.class.getCanonicalName()+" annotation");
+        }
+        ServerEndpointConfig.Builder bldr =  ServerEndpointConfig.Builder.create(clazz, anno.value());
+        if(defaultConfigurator != null){
+            bldr = bldr.configurator(defaultConfigurator);
+        }
+        endpointConfigs.add(bldr.build());
         if (starting)
             throw new RuntimeException("can't add endpoint after starting lifecycle");
     }
@@ -91,19 +106,16 @@ public class WebsocketBundle implements Bundle {
                     StringBuilder sb = new StringBuilder("Registering websocket endpoints: ")
                             .append(System.lineSeparator())
                             .append(System.lineSeparator());
-
-                    annotatedEndpoints.forEach(rethrow(ep -> addEndpoint(wsContainer, ep, null, sb)));
-                    extendsEndpoints.forEach(rethrow(conf -> addEndpoint(wsContainer, conf.getEndpointClass(), conf, sb)));
+                    endpointConfigs.forEach(rethrow(conf -> addEndpoint(wsContainer, conf, sb)));
                     LOG.info(sb.toString());
                 } catch (ServletException ex) {
                     throw new RuntimeException(ex);
                 }
             }
 
-            private void addEndpoint(ServerContainer wsContainer, final Class<?> endpointClass, ServerEndpointConfig conf, StringBuilder sb) throws DeploymentException {
-                ServerEndpointMetadata md = wsContainer.getServerEndpointMetadata(endpointClass, conf);
-                wsContainer.addEndpoint(md);
-                sb.append(String.format("    WS      %s (%s)", md.getPath(), endpointClass.getName())).append(System.lineSeparator());
+            private void addEndpoint(ServerContainer wsContainer, ServerEndpointConfig conf, StringBuilder sb) throws DeploymentException {
+                wsContainer.addEndpoint(conf);
+                sb.append(String.format("    WS      %s (%s)", conf.getPath(), conf.getEndpointClass().getName())).append(System.lineSeparator());
             }
         });
     }
