@@ -55,8 +55,10 @@ public class DropWizardWebsocketsTest {
         serverThread.setDaemon(true);
         serverThread.start();
         serverStarted.await(10, SECONDS);
-        if (System.getProperty(TRAVIS_ENV)!=null)
-            Thread.sleep(10); // Ugly sleep to debug travis
+        if (System.getProperty(TRAVIS_ENV)!=null) {
+            System.out.println("waiting for Travis machine");
+            Thread.sleep(10); // Ugly sleep to debug travis            
+        }
     }
     private static final String TRAVIS_ENV = "TRAVIS_ENV";
     private CloseableHttpClient client;

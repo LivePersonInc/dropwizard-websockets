@@ -206,7 +206,7 @@
                 <artifactId>versioneye-maven-plugin</artifactId>
                 <version>3.10.0</version>
                 <configuration>
-                    <apiKey>${versioneye.apiKey}</apiKey>
+                    <apiKey>${env.versioneye-apiKey}</apiKey>
                     <transitiveDependencies>false</transitiveDependencies>
                 </configuration>
             </plugin>
