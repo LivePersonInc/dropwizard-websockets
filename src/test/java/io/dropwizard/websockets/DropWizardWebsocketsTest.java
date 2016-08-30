@@ -73,7 +73,12 @@ public class DropWizardWebsocketsTest {
                         .build()).build();
         this.om = new ObjectMapper();
         this.wsClient = ClientManager.createClient();
-        wsClient.getProperties().put(ClientProperties.HANDSHAKE_TIMEOUT, 10000);
+        wsClient.getProperties().put(ClientProperties.HANDSHAKE_TIMEOUT, 10000);        
+            if (System.getProperty(TRAVIS_ENV) != null) {
+                System.out.println("waiting for Travis machine");
+                waitUrlAvailable(String.format("http://%s:%d/api?name=foo", LOCALHOST, PORT));
+//                Thread.sleep(1); // Ugly sleep to debug travis            
+            }
     }
 
     @After
@@ -85,10 +90,6 @@ public class DropWizardWebsocketsTest {
     public void testGet() throws IOException, InterruptedException, Exception {
         final int NUM = 2;
         for (int i = 0; i < NUM; i++) {
-            if (System.getProperty(TRAVIS_ENV) != null) {
-                System.out.println("waiting for Travis machine");
-                Thread.sleep(1); // Ugly sleep to debug travis            
-            }
             assertTrue(client.execute(new HttpGet(String.format("http://%s:%d/api?name=foo", LOCALHOST, PORT)), BASIC_RESPONSE_HANDLER).contains("foo"));
         }
         ObjectNode json = om.readValue(client.execute(new HttpGet(METRICS_URL), BASIC_RESPONSE_HANDLER), ObjectNode.class);
