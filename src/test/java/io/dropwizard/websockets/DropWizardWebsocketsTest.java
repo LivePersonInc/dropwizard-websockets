@@ -55,6 +55,7 @@ public class DropWizardWebsocketsTest {
         serverThread.setDaemon(true);
         serverThread.start();
         serverStarted.await(10, SECONDS);
+        Thread.sleep(10); // Ugly sleep to debug travis
     }
     private CloseableHttpClient client;
     private ObjectMapper om;
@@ -64,7 +65,7 @@ public class DropWizardWebsocketsTest {
     public void setUp() throws Exception {
         
         this.client = HttpClients.custom()
-                .setServiceUnavailableRetryStrategy(new DefaultServiceUnavailableRetryStrategy())
+                .setServiceUnavailableRetryStrategy(new DefaultServiceUnavailableRetryStrategy(20,10))
                 .setDefaultRequestConfig(RequestConfig.custom()
                         .setSocketTimeout(10000)
                         .setConnectTimeout(10000)
