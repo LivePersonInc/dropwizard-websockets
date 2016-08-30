@@ -36,6 +36,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultServiceUnavailableRetryStrategy;
 import org.apache.http.impl.client.HttpClients;
 import org.glassfish.tyrus.client.ClientManager;
 import org.glassfish.tyrus.client.ClientProperties;
@@ -61,9 +62,14 @@ public class DropWizardWebsocketsTest {
 
     @Before
     public void setUp() throws Exception {
-        this.client = HttpClients.custom().setDefaultRequestConfig(RequestConfig.custom()
-                .setSocketTimeout(10000).setConnectTimeout(10000).setConnectionRequestTimeout(10000)
-                .build()).build();
+        
+        this.client = HttpClients.custom()
+                .setServiceUnavailableRetryStrategy(new DefaultServiceUnavailableRetryStrategy())
+                .setDefaultRequestConfig(RequestConfig.custom()
+                        .setSocketTimeout(10000)
+                        .setConnectTimeout(10000)
+                        .setConnectionRequestTimeout(10000)
+                        .build()).build();
         this.om = new ObjectMapper();
         this.wsClient = ClientManager.createClient();
         wsClient.getProperties().put(ClientProperties.HANDSHAKE_TIMEOUT, 10000);
