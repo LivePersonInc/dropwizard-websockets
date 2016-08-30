@@ -207,7 +207,7 @@
                 <version>3.10.0</version>
                 <configuration>
                     <apiKey>${versioneye.apiKey}</apiKey>
-                    <transitiveDependencies>true</transitiveDependencies>
+                    <transitiveDependencies>false</transitiveDependencies>
                 </configuration>
             </plugin>
             <plugin>
