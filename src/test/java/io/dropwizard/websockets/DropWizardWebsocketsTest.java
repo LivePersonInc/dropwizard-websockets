@@ -55,10 +55,6 @@ public class DropWizardWebsocketsTest {
         serverThread.setDaemon(true);
         serverThread.start();
         serverStarted.await(10, SECONDS);
-        if (System.getProperty(TRAVIS_ENV)!=null) {
-            System.out.println("waiting for Travis machine");
-            Thread.sleep(10); // Ugly sleep to debug travis            
-        }
     }
     private static final String TRAVIS_ENV = "TRAVIS_ENV";
     private CloseableHttpClient client;
@@ -67,9 +63,9 @@ public class DropWizardWebsocketsTest {
 
     @Before
     public void setUp() throws Exception {
-        
+
         this.client = HttpClients.custom()
-                .setServiceUnavailableRetryStrategy(new DefaultServiceUnavailableRetryStrategy(20,10))
+                .setServiceUnavailableRetryStrategy(new DefaultServiceUnavailableRetryStrategy(20, 10))
                 .setDefaultRequestConfig(RequestConfig.custom()
                         .setSocketTimeout(10000)
                         .setConnectTimeout(10000)
@@ -88,8 +84,13 @@ public class DropWizardWebsocketsTest {
     @Test
     public void testGet() throws IOException, InterruptedException, Exception {
         final int NUM = 2;
-        for (int i = 0; i < NUM; i++)
+        for (int i = 0; i < NUM; i++) {
+            if (System.getProperty(TRAVIS_ENV) != null) {
+                System.out.println("waiting for Travis machine");
+                Thread.sleep(1); // Ugly sleep to debug travis            
+            }
             assertTrue(client.execute(new HttpGet(String.format("http://%s:%d/api?name=foo", LOCALHOST, PORT)), BASIC_RESPONSE_HANDLER).contains("foo"));
+        }
         ObjectNode json = om.readValue(client.execute(new HttpGet(METRICS_URL), BASIC_RESPONSE_HANDLER), ObjectNode.class);
         Assert.assertEquals(NUM,
                 json.path("meters").path(MyApp.MyResource.class.getName() + ".get").path("count").asInt());
