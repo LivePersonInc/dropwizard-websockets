@@ -65,7 +65,7 @@ public class DropWizardWebsocketsTest {
     public void setUp() throws Exception {
 
         this.client = HttpClients.custom()
-                .setServiceUnavailableRetryStrategy(new DefaultServiceUnavailableRetryStrategy(20, 10))
+                .setServiceUnavailableRetryStrategy(new DefaultServiceUnavailableRetryStrategy(3, 2000))
                 .setDefaultRequestConfig(RequestConfig.custom()
                         .setSocketTimeout(10000)
                         .setConnectTimeout(10000)
