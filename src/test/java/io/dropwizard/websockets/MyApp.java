@@ -114,6 +114,7 @@ public class MyApp extends Application<Configuration> {
 
         @Override
         public void onOpen(Session session, EndpointConfig config) {
+            session.addMessageHandler(this);
             session.getAsyncRemote().sendText("welcome");
             this.session = session;
         }
