@@ -12,7 +12,7 @@
     </properties>
     <artifactId>dropwizard-websockets</artifactId>
     <packaging>jar</packaging>
-    <inceptionYear>2015</inceptionYear>
+    <inceptionYear>2017</inceptionYear>
     <name>Dropwizard Websocket Support</name>
     <description>3rd party bundle for dropwizard to enable websocket services.</description>
     <url>https://github.com/LivePersonInc/dropwizard-websockets</url>
