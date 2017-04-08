@@ -2,13 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.liveperson</groupId>
-    <version>1.0.5-2-SNAPSHOT</version>
+    <version>1.1.0</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <dropwizard.version>1.0.5</dropwizard.version>
-        <jetty.version>9.3.9.v20160517</jetty.version>
+        <dropwizard.version>1.1.0</dropwizard.version>
+        <jetty.version>9.4.2.v20170220</jetty.version>
     </properties>
     <artifactId>dropwizard-websockets</artifactId>
     <packaging>jar</packaging>
@@ -165,7 +165,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version> 3.0-r1585899</version>
+                <version>3.0-r1585899</version>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <useReleaseProfile>false</useReleaseProfile>
