@@ -1,7 +1,7 @@
 Dropwizard Websocket Support
 ==========
 [![Build Status](https://api.travis-ci.org/LivePersonInc/dropwizard-websockets.svg?branch=master)](https://travis-ci.org/LivePersonInc/dropwizard-websockets)
-[![Manual maven central](https://img.shields.io/badge/maven--central-v1.1.0-blue.svg)](http://search.maven.org/#artifactdetails%7Ccom.liveperson%7Cdropwizard-websockets%7C1.1.0%7Cjar)
+[![Manual maven central](https://img.shields.io/badge/maven--central-v1.2.0-blue.svg)](http://search.maven.org/#artifactdetails%7Ccom.liveperson%7Cdropwizard-websockets%7C1.2.0%7Cjar)
 [![Dependency Status](https://www.versioneye.com/user/projects/5642ede8c5999a0009027e23/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5642ede8c5999a0009027e23)
 [![Coverage Status](https://coveralls.io/repos/LivePersonInc/dropwizard-websockets/badge.svg?branch=master&service=github)](https://coveralls.io/github/LivePersonInc/dropwizard-websockets?branch=master)
 
